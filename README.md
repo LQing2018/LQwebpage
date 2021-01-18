@@ -1,2 +1,2 @@
-# LQwebpage
-个人兴趣记录
+# LQing
+暂且不写吧
