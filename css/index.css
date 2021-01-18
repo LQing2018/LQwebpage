@@ -1,0 +1,21 @@
+body,
+html {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+}
+.banner{
+    width: 100%;
+}
+.banerimg{
+    border: 1px solid #000;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+.banerimg video,
+.banerimg img{
+    width: 120%;
+}
