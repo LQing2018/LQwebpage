@@ -13,13 +13,23 @@
 <body>
 	<div id="app">
 		<div class="banner">
-			<div class="banerimg">
-				<img class="dong" src="./images/dong.jpg" alt="">
-				<img class="dong1" src="./images/dong1.jpg" alt=""> 
-				<video class="dong3" src="./images/dong3.webm" initial-time="0" autoplay="true" loop="false" muted="false" direction="0"
-					bindplay="" bindpause="" bindended="" bindtimeupdate="" bindwaiting="" binderror=""></video>
-				  
+			<div class="banerimg" @mouseenter="enter($event)" @mouseleave="leave()" @mousemove="move($event)">
+				<div class="imgobj">
+					<img class="tr tree" src="./images/tree.png" alt="" :style="{ opacity: optree,left:treleft+'rem'}">
+					<img class="tr tree1" src="./images/tree1.png" alt=""
+						:style="{ opacity: optree1,left:treleft1+'rem'}">
+					<img class="tr tree3" src="./images/tree3.png" alt=""
+						:style="{ opacity: optree3,left:treleft3+'rem'}">
+					<img class="dong" src="./images/dong.jpg" alt="" :style="{ opacity: opvalue,left:lefx+'rem'}">
+					<img class="dong1" src="./images/dong1.jpg" alt="" :style="{ opacity: opvalue1,left:lefx1+'rem'}">
+					<video class="dong3" src="./images/dong3.webm" initial-time="0" autoplay="true" loop="false"
+						muted="false" direction="0" bindplay="" bindpause="" bindended="" bindtimeupdate=""
+						bindwaiting="" binderror="" :style="{ opacity: opvalue3,left:lefx3+'rem'}"></video>
+				</div>
+
+
 			</div>
+
 		</div>
 	</div>
 	<script src="./js/mui.min.js" type="text/javascript" charset="utf-8"></script>
@@ -29,13 +39,194 @@
 	<script>
 		new Vue({
 			el: '#app',
-			data: { 
+			data: {
+				opvalue: '0',
+				opvalue1: '1',
+				opvalue3: '0',
+				lefx: '-1.534',
+				lefx1: '-1.534',
+				lefx3: '-1.534',
+				optree: '0',
+				optree1: '1',
+				optree3: '0',
+				treleft: '-1.534',
+				treleft1: '-1.534',
+				treleft3: '-1.534',
+				oldx: '',
+				newx: '',
 			},
-			created() { 
+			created() {},
+			computed() {
+
 			},
-			methods: { 
+			methods: {
+				enter(e) {
+					this.oldx = e.clientX;
+				},
+				leave() {
+					this.opvalue = this.optree = '0';
+					this.opvalue1 = this.optree1 = '1';
+					this.opvalue3 = this.optree3 = '0';
+					this.lefx = this.treleft = '-1.534';
+					this.lefx1 = this.treleft1 = '-1.534';
+					this.lefx3 = this.treleft3 = '-1.534';
+				},
+				move(e) {
+					var x = e.clientX
+					var ox = this.oldx
+					if (e.clientX - this.oldx < 0) {
+						this.opvalue1 = 1 - ((ox - x) / 800)
+						this.opvalue = (ox - x) / 800
+						this.lefx = this.lefx1 = -((ox - x) / 1000) + (-1.534)
+
+						this.optree1 = 1 - ((ox - x) / 800)
+						this.optree = (ox - x) / 800
+						this.treleft = this.treleft1 = -((ox - x) / 1000) + (-1.534)
+
+					} else if (e.clientX - this.oldx > 0) {
+						this.opvalue1 = 1 - ((x - ox) / 800)
+						this.opvalue3 = (x - ox) / 800
+						this.lefx1 = this.lefx3 = (-1.534) + ((x - ox) / 1000)
+
+						this.optree1 = 1 - ((x - ox) / 800)
+						this.optree3 = (x - ox) / 800
+						this.treleft1 = this.treleft3 = (-1.534) + ((x - ox) / 1000)
+					} else {
+						this.opvalue = this.optree = '0';
+						this.opvalue1 = this.optree1 = '1';
+						this.opvalue3 = this.optree3 = '0';
+					}
+					var x = e.clientX; //获取鼠标事件的坐标
+					var y = e.clientY;
+				},
 			}
 		})
+
+		(function (window, document, undefined) {
+			// 存储所有的雪花
+			const snows = [];
+
+			// 下落的加速度
+			const G = 0.01;
+
+			const fps = 60;
+
+			// 速度上限，避免速度过快
+			const SPEED_LIMIT_X = 1;
+			const SPEED_LIMIT_Y = 1;
+
+			const W = window.innerWidth;
+			const H = window.innerHeight;
+
+			let tickCount = 150;
+			let ticker = 0;
+			let lastTime = Date.now();
+			let deltaTime = 0;
+
+			let canvas = null;
+			let ctx = null;
+
+			let snowImage = null;
+
+			window.requestAnimationFrame = (function () {
+				return window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.oRequestAnimationFrame ||
+					window.msRequestAnimationFrame ||
+					function (callback) {
+						setTimeout(callback, 1000 / fps);
+					}
+			})();
+
+			init();
+
+			function init() {
+				createCanvas();
+				canvas.width = W;
+				canvas.height = H;
+				canvas.style.cssText = 'position: fixed; top: 0; left: 0; pointer-events: none;';
+				document.body.appendChild(canvas);
+				// 小屏幕时延长添加雪花时间，避免屏幕上出现太多的雪花
+				if (W < 768) {
+					tickCount = 350;
+				}
+
+				snowImage = new Image();
+				snowImage.src = 'snow.png';
+
+				loop();
+			}
+
+			function loop() {
+				requestAnimationFrame(loop);
+
+				ctx.clearRect(0, 0, W, H);
+
+				const now = Date.now();
+				deltaTime = now - lastTime;
+				lastTime = now;
+				ticker += deltaTime;
+
+				if (ticker > tickCount) {
+					snows.push(
+						new Snow(Math.random() * W, 0, Math.random() * 5 + 5)
+					);
+					ticker %= tickCount;
+				}
+
+				const length = snows.length;
+				snows.map(function (s, i) {
+					s.update();
+					s.draw();
+					if (s.y >= H) {
+						snows.splice(i, 1);
+					}
+				});
+			}
+
+			function Snow(x, y, radius) {
+				this.x = x;
+				this.y = y;
+				this.sx = 0;
+				this.sy = 0;
+				this.deg = 0;
+				this.radius = radius;
+				this.ax = Math.random() < 0.5 ? 0.005 : -0.005;
+			}
+
+			Snow.prototype.update = function () {
+				const deltaDeg = Math.random() * 0.6 + 0.2;
+
+				this.sx += this.ax;
+				if (this.sx >= SPEED_LIMIT_X || this.sx <= -SPEED_LIMIT_X) {
+					this.ax *= -1;
+				}
+
+				if (this.sy < SPEED_LIMIT_Y) {
+					this.sy += G;
+				}
+
+				this.deg += deltaDeg;
+				this.x += this.sx;
+				this.y += this.sy;
+			}
+
+			Snow.prototype.draw = function () {
+				const radius = this.radius;
+				ctx.save();
+				ctx.translate(this.x, this.y);
+				ctx.rotate(this.deg * Math.PI / 180);
+				ctx.drawImage(snowImage, -radius, -radius, radius * 2, radius * 2);
+				ctx.restore();
+			}
+
+			function createCanvas() {
+				canvas = document.createElement('canvas');
+				ctx = canvas.getContext('2d');
+			}
+
+		})(window, document);
 	</script>
 </body>
 
