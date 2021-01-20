@@ -4,15 +4,16 @@
 <head>
 	<meta charset="utf-8" />
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-	<title>俞小澍</title>
-	<link rel="stylesheet" type="text/css" href="./css/mui.min.css" />
+	<title>俞小澍</title> 
 	<link rel="stylesheet" type="text/css" href="./css/common.css" />
 	<link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 
 <body>
 	<div id="app">
-		<div class="banner">
+		<div class="content">
+
+			<!-- 鼠标移动图片 -->
 			<div class="banerimg" @mouseenter="enter($event)" @mouseleave="leave()" @mousemove="move($event)">
 				<div class="imgobj">
 					<img class="tr tree" src="./images/tree.png" alt="" :style="{ opacity: optree,left:treleft+'rem'}">
@@ -26,13 +27,26 @@
 						muted="false" direction="0" bindplay="" bindpause="" bindended="" bindtimeupdate=""
 						bindwaiting="" binderror="" :style="{ opacity: opvalue3,left:lefx3+'rem'}"></video>
 				</div>
-
-
 			</div>
-
+			<!-- logo -->
+			<div class="logo">
+				<div class="logoa">
+					<a href="javascript:;">
+						<img src="./images/logo.png" alt="">
+					</a>
+				</div>
+				<div class="logoa">
+					<a href="javascript:;">
+						<img src="./images/logo.png" alt="">
+					</a>
+				</div>
+			</div>
+			<!-- banner -->
+			<div class="banner">
+				 
+			</div>
 		</div>
 	</div>
-	<script src="./js/mui.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="./js/vue.js"></script>
 	<script src="./js/rem.js"></script>
 	<script src="./js/reaquest.js" type="text/javascript" charset="utf-8"></script>
@@ -55,11 +69,10 @@
 				oldx: '',
 				newx: '',
 			},
-			created() {},
-			computed() {
-
+			created() {
 			},
 			methods: {
+
 				enter(e) {
 					this.oldx = e.clientX;
 				},
@@ -101,7 +114,7 @@
 				},
 			}
 		})
-		</script>
+	</script>
 </body>
 
 </html>

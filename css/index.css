@@ -5,8 +5,9 @@ html {
     /* background-color: #ffffff;  */
     background:#333;
 }
-.banner{
+.content{
     width: 100%;
+    min-width: 12rem;
 }
 .banerimg{ 
     width: 100%;
@@ -32,4 +33,24 @@ html {
 }
 .banerimg img.tr{
     z-index: 12;
+}
+.logo{
+    width: 100%; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo a{
+    width: 2rem;
+    display: inline-block; 
+}
+.logo a img{
+    width: 100%;
+}
+
+/* banner */
+.mui-slider{
+    width: 100%;
+    height: 3rem;
+    border: 1px solid #ffffff;
 }
